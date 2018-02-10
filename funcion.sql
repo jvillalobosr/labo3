@@ -1,3 +1,21 @@
+/*    ==Scripting Parameters==
+
+    Source Server Version : SQL Server 2016 (13.0.4001)
+    Source Database Engine Edition : Microsoft SQL Server Express Edition
+    Source Database Engine Type : Standalone SQL Server
+
+    Target Server Version : SQL Server 2017
+    Target Database Engine Edition : Microsoft SQL Server Standard Edition
+    Target Database Engine Type : Standalone SQL Server
+*/
+
+USE [AdventureWorks2014]
+GO
+/****** Object:  UserDefinedFunction [dbo].[ProductCompare]    Script Date: 09/02/2018 06:13:04 p.m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 ALTER FUNCTION [dbo].[ProductCompare] 
 (
 	@ProductID	INT,
@@ -51,6 +69,7 @@ BEGIN
 			CASE 
 				WHEN ISNULL(@Price,-1) = @Int_Price THEN @MENSAJE + 'El precio es igual. '
 				WHEN ISNULL(@Price,-1) > @Int_Price THEN @MENSAJE + 'El precio es mayor. '
+				WHEN ISNULL(@Price,-1) = -1			THEN @MENSAJE + 'El precio es diferente. '
 				ELSE									 @MENSAJE + 'El precio es menor. '
 			END
 
@@ -60,9 +79,10 @@ BEGIN
 			
 				SET @MENSAJE = 
 				CASE
-					WHEN ISNULL(@Size,'') = @Int_Size THEN	@MENSAJE + 'El tamaño es igual. '
-					WHEN ISNULL(@Size,'') > @Int_Size THEN  @MENSAJE + 'El tamaño es mayor. '
-					ELSE									@MENSAJE + 'El tamaño es menor. '
+					WHEN ISNULL(@Size,'') = @Int_Size	THEN	@MENSAJE + 'El tamaño es igual. '
+					WHEN ISNULL(@Size,'') > @Int_Size	THEN	@MENSAJE + 'El tamaño es mayor. '
+					WHEN ISNULL(@Size,'') = ''			THEN	@MENSAJE + 'El tamaño es diferente. '
+					ELSE										@MENSAJE + 'El tamaño es menor. '
 				END
 
 			-- Comparacion de tamaño por letra
@@ -99,4 +119,3 @@ BEGIN
 	Return @MENSAJE
 
 END
-GO
